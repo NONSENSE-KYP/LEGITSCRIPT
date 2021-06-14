@@ -1,2 +1,2 @@
 # LEGITSCRIPT
-Public Chinese Script For 2Take1
+一个中文的公开2Take1脚本
