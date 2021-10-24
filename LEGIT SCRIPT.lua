@@ -1,5 +1,5 @@
 --Define
-scriptver = "1.0.7"
+scriptver = "1.0.8"
 notifycolor = 175
 notifyset = 2
 inputstyle = 0
@@ -4820,7 +4820,7 @@ function instacrash(pid)
 		local pos = getcoords(pid)
 		pos.z = pos.z + 0.6
 		ped1 = createped(26,0x2D7030F3,pos,0)
-		entity.attach_entity_to_entity(ped1,player.get_player_ped(pid), 0, v3(0.30,0,0.0),v3(0.0,0,0.0), true, true, false, 0, true)
+		entity.attach_entity_to_entity(ped1,getped(pid), 0, v3(0.30,0,0.0),v3(0.0,0,0.0), true, true, false, 0, true)
 		entity.freeze_entity(ped1, true)
 		network.request_control_of_entity(ped1)
 		  while not network.has_control_of_entity(ped1) do
@@ -4831,7 +4831,7 @@ function instacrash(pid)
 		   CD(2000)
 		entity.delete_entity(ped1)
 		ped2 = createped(26,0x856CFB02,pos,0)
-		entity.attach_entity_to_entity(ped2,player.get_player_ped(pid), 0, v3(0.30,0,0.0),v3(0.0,0,0.0), true, true, false, 0, true)
+		entity.attach_entity_to_entity(ped2,getped(pid), 0, v3(0.30,0,0.0),v3(0.0,0,0.0), true, true, false, 0, true)
 		entity.freeze_entity(ped2, true)
 		network.request_control_of_entity(ped2)
 		  while not network.has_control_of_entity(ped2) do
@@ -5235,6 +5235,28 @@ end
 --Closet
 closet = newfunc("衣柜选项", "parent", self).id
 --Preset
+newfunc(
+    "随机服饰",
+    "action",
+    closet,
+    function()
+		ped.set_ped_random_component_variation(getped(player.player_id()))
+		for i = 0,9 do
+			local index = math.random(0,ped.get_ped_prop_index(getped(player.player_id()),i))
+			local texture = math.random(0,ped.get_ped_prop_texture_index(getped(player.player_id()),index))
+			ped.set_ped_prop_index(getped(player.player_id()), i, index, texture, 0)
+		end
+    end
+)
+newfunc(
+    "恢复默认套装",
+    "action",
+    closet,
+    function()
+		ped.set_ped_default_component_variation(getped(player.player_id()))
+		ped.clear_all_ped_props(getped(player.player_id()))
+    end
+)
 newfunc(
     "乳贴",
     "action",
@@ -5668,8 +5690,8 @@ newfunc(
                 entity.set_entity_god_mode(ball, true)
                 entity.attach_entity_to_entity(
                     ball,
-                    player.get_player_ped(pid),
-                    ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+                    getped(pid),
+                    ped.get_ped_bone_index(getped(pid), 11816),
                     v3(),
                     v3(),
                     true,
@@ -5694,7 +5716,7 @@ newfunc(
                 local allweaponhashes = weapon.get_all_weapon_hashes()
                 for i = 1, #allweaponhashes do
                     requestmodel(allweaponhashes[i])
-                    weapon.give_delayed_weapon_to_ped(player.get_player_ped(pid), allweaponhashes[i], 0, 0)
+                    weapon.give_delayed_weapon_to_ped(getped(pid), allweaponhashes[i], 0, 0)
                     streaming.set_model_as_no_longer_needed(allweaponhashes[i])
                 end
             end
@@ -5716,25 +5738,25 @@ newfunc(
                 elseif feat.value == 1 then
                     TSE(545396442, pid, {0})
                 elseif feat.value == 2 then
-                    network.request_control_of_entity(player.get_player_ped(pid))
+                    network.request_control_of_entity(getped(pid))
                     local pos = ui.get_waypoint_coord()
                     local pos = v3(pos.x, pos.y, 10000)
-                    if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) then
+                    if ped.is_ped_in_any_vehicle(getped(pid)) then
                         network.request_control_of_entity(getveh(pid))
                         entity.set_entity_coords_no_offset(getveh(pid), pos)
                     else
-                        entity.set_entity_coords_no_offset(player.get_player_ped(pid), pos)
+                        entity.set_entity_coords_no_offset(getped(pid), pos)
                     end
                 elseif feat.value == 3 then
-                    network.request_control_of_entity(player.get_player_ped(pid))
+                    network.request_control_of_entity(getped(pid))
                     local pos = getcoords(player.player_id())
                     pos.z = 10000
-                    if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) then
+                    if ped.is_ped_in_any_vehicle(getped(pid)) then
                         network.request_control_of_entity(getveh(pid))
                         entity.set_entity_coords_no_offset(getveh(pid), pos)
 						vehicle.set_vehicle_on_ground_properly(getveh(pid))
                     else
-                        entity.set_entity_coords_no_offset(player.get_player_ped(pid), pos)
+                        entity.set_entity_coords_no_offset(getped(pid), pos)
                     end
                 end
             end
@@ -5913,8 +5935,8 @@ customattachall =
                     obj = object.create_object(joaat(entname), v3(), true, false)
                     entity.attach_entity_to_entity(
                         obj,
-                        player.get_player_ped(pid),
-                        ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+                        getped(pid),
+                        ped.get_ped_bone_index(getped(pid), 11816),
                         v3(),
                         v3(0.0, 0.0, 10.0),
                         true,
@@ -5945,8 +5967,8 @@ newfunc(
                 bf = object.create_object(3229200997, v3(), true, false)
                 entity.attach_entity_to_entity(
                     bf,
-                    player.get_player_ped(pid),
-                    ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+                    getped(pid),
+                    ped.get_ped_bone_index(getped(pid), 11816),
                     v3(),
                     v3(0.0, 0.0, 10.0),
                     true,
@@ -5971,8 +5993,8 @@ newfunc(
                 ufo = object.create_object(joaat("p_spinning_anus_s"), v3(), true, false)
                 entity.attach_entity_to_entity(
                     ufo,
-                    player.get_player_ped(pid),
-                    ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+                    getped(pid),
+                    ped.get_ped_bone_index(getped(pid), 11816),
                     v3(),
                     v3(0.0, 0.0, 0),
                     true,
@@ -5997,8 +6019,8 @@ newfunc(
                 DICK = object.create_object(joaat("prop_cs_dildo_01"), v3(), true, false)
                 entity.attach_entity_to_entity(
                     DICK,
-                    player.get_player_ped(pid),
-                    ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+                    getped(pid),
+                    ped.get_ped_bone_index(getped(pid), 11816),
                     v3(),
                     v3(0.0, 0.0, 0),
                     true,
@@ -6020,7 +6042,7 @@ newfunc(
         if feat.on then
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
-                    fire.add_explosion(getcoords(pid), 12, true, false, 0, player.get_player_ped(pid))
+                    fire.add_explosion(getcoords(pid), 12, true, false, 0, getped(pid))
                 end
             end
             CD(10)
@@ -6038,7 +6060,7 @@ newfunc(
         if feat.on then
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
-                    fire.add_explosion(getcoords(pid), 13, true, false, 0, player.get_player_ped(pid))
+                    fire.add_explosion(getcoords(pid), 13, true, false, 0, getped(pid))
                 end
             end
             CD(10)
@@ -6077,7 +6099,7 @@ newfunc(
             if pid ~= player.player_id() and player.is_player_valid(pid) then
                 local allweaponhashes = weapon.get_all_weapon_hashes()
                 for i = 1, #allweaponhashes do
-                    weapon.remove_weapon_from_ped(player.get_player_ped(pid), allweaponhashes[i])
+                    weapon.remove_weapon_from_ped(getped(pid), allweaponhashes[i])
                     CD(5)
                 end
             end
@@ -6166,7 +6188,7 @@ newfunc(
         if feat.on then
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
-                    ped.set_ped_to_ragdoll(player.get_player_ped(pid), 2500, 0, 0)
+                    ped.set_ped_to_ragdoll(getped(pid), 2500, 0, 0)
                     CD(50)
                 end
             end
@@ -6191,7 +6213,7 @@ newfunc(
                         false,
                         false,
                         100.0,
-                        player.get_player_ped(pid)
+                        getped(pid)
                     )
                 end
             end
@@ -6207,7 +6229,7 @@ newfunc(
         if feat.on then
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
-                    ped.clear_ped_tasks_immediately(player.get_player_ped(pid))
+                    ped.clear_ped_tasks_immediately(getped(pid))
                 end
             end
         end
@@ -6222,7 +6244,7 @@ newfunc(
         if feat.on then
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
-                    fire.add_explosion(getcoords(pid), 0, true, false, 0, player.get_player_ped(pid))
+                    fire.add_explosion(getcoords(pid), 0, true, false, 0, getped(pid))
                     CD(15)
                 end
             end
@@ -6465,7 +6487,7 @@ newfunc(
         if feat.on then
 			for pid = 0, 32 do
 				if pid ~= player.player_id() and player.is_player_valid(pid) then
-					if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) == true then
+					if ped.is_ped_in_any_vehicle(getped(pid)) == true then
 						vehicle.set_vehicle_can_be_locked_on(getveh(pid), false, false)
 					end
 				end
@@ -6474,7 +6496,7 @@ newfunc(
 		else
 			for pid = 0, 32 do
 				if pid ~= player.player_id() and player.is_player_valid(pid) then
-					if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) == true then
+					if ped.is_ped_in_any_vehicle(getped(pid)) == true then
 						vehicle.set_vehicle_can_be_locked_on(getveh(pid), true, false)
 					end
 				end
@@ -6608,7 +6630,7 @@ hostlist =
             ui.draw_text("Host Queue List", txtpos)
             local host_queue = {}
             for pid = 0, 32 do
-                if player.get_player_ped(pid) ~= 0 then
+                if getped(pid) ~= 0 then
                     if not player.is_player_host(pid) then
                         local name = player.get_player_name(pid)
                         local queue = player.get_player_host_priority(pid)
@@ -7068,7 +7090,7 @@ chatcommandswitch = newfunc(
 				local target = stringsplit(c.body, " ")[2]
 				for pid = 0,32 do
 					if target == player.get_player_name(pid) or target == player.get_player_scid(pid) then
-						fire.add_explosion(getcoords(pid), 0, true, false, 0, player.get_player_ped(pid))
+						fire.add_explosion(getcoords(pid), 0, true, false, 0, getped(pid))
 					end
 				end
 			end
@@ -7092,15 +7114,15 @@ chatcommandswitch = newfunc(
 				local target = stringsplit(c.body, " ")[2]
 				for pid = 0,32 do
 					if target == player.get_player_name(pid) or target == player.get_player_scid(pid) then
-						network.request_control_of_entity(player.get_player_ped(pid))
+						network.request_control_of_entity(getped(pid))
 						local pos = getcoords(c.player)
 						pos.z = 10000
-						if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) then
+						if ped.is_ped_in_any_vehicle(getped(pid)) then
 							network.request_control_of_entity(getveh(pid))
 							entity.set_entity_coords_no_offset(getveh(pid), pos)
 							vehicle.set_vehicle_on_ground_properly(getveh(pid))
 						else
-							entity.set_entity_coords_no_offset(player.get_player_ped(pid), pos)
+							entity.set_entity_coords_no_offset(getped(pid), pos)
 						end
 					end
 				end
@@ -7113,8 +7135,8 @@ chatcommandswitch = newfunc(
 						ufo = object.create_object(gameplay.get_hash_key("p_spinning_anus_s"), v3(), true, false)
 						entity.attach_entity_to_entity(
 							ufo,
-							player.get_player_ped(pid),
-							ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+							getped(pid),
+							ped.get_ped_bone_index(getped(pid), 11816),
 							v3(),
 							v3(0.0, 0.0, 0),
 							true,
@@ -7296,6 +7318,24 @@ unlockable = newfunc(
 		else
 			if ped.is_ped_in_any_vehicle(getped(player.player_id())) == true then
 				vehicle.set_vehicle_can_be_locked_on(getveh(player.player_id()), true, false)
+            end
+			return HANDLER_POP
+		end
+    end
+)
+newfunc(
+    "隐形车",
+    "toggle",
+    genvehicle,
+    function(feat)
+        if feat.on then
+			if ped.is_ped_in_any_vehicle(getped(player.player_id())) == true then
+				entity.set_entity_alpha(getveh(player.player_id()), 0, false)
+            end
+			return HANDLER_CONTINUE
+		else
+			if ped.is_ped_in_any_vehicle(getped(player.player_id())) == true then
+				entity.set_entity_alpha(getveh(player.player_id()), 255, true)
             end
 			return HANDLER_POP
 		end
@@ -7795,38 +7835,129 @@ newfunc(
     end
 )
 basemod = newfunc("2Take1Sense", "parent", troll).id
-newfunc(
-    "Random Jitter",
-    "toggle",
-    basemod,
-    function(feat)
-        if feat.on then
-            local randomheading = math.random(0, 360)
-            entity.set_entity_coords_no_offset(getped(player.player_id()), getcoords(player.player_id()))
-            entity.set_entity_heading(getped(player.player_id()), randomheading)
-            CD(10)
-            return HANDLER_CONTINUE
-        else
-            return HANDLER_POP
-        end
-    end
-)
-newfunc(
+aamaster = newfunc(
     "Anti-Aim",
     "toggle",
     basemod,
-    function(feat, pid)
+    function(feat)
+		if feat.on then
+			ui.draw_rect(0.85, 0.025, 0.2, 0.025, 0, 0, 0, 120)
+			ui.set_text_color(255, 255, 255, 255)
+			ui.set_text_scale(0.25)
+			ui.set_text_font(renderfont)
+			ui.set_text_centre(true)
+			ui.set_text_outline(true)
+			local ostime = os.date("%H:%M:%S")
+			ui.draw_text("Gamesense|"..player.get_player_name(player.player_id()).."|64tick|"..ostime, v2(0.85, 0.015))
+			return HANDLER_CONTINUE
+		else
+			return HANDLER_POP
+		end
+    end
+)
+local peekdown = false
+local peekpos = v3()
+local peekheading = 0
+autopeek = newfunc(
+    "Auto-Peek",
+    "toggle",
+    basemod,
+    function(feat)
+		if feat.on then
+			local key = MenuKey()
+			key:push_str("LCONTROL")
+			if key:is_down() then
+				if peekdown == false then
+					peekdown = true
+					peekpos = getcoords(player.player_id())
+					peekheading = entity.get_entity_heading(getped(player.player_id()))
+				end
+			end
+			if key:is_down() == false then
+				if peekdown == true then
+					teleport(peekpos.x,peekpos.y,peekpos.z,peekheading)
+					peekdown = false
+				end
+			end
+			return HANDLER_CONTINUE
+		else
+			return HANDLER_POP
+		end
+    end
+)
+local currentheading = 0
+local aaleftlimit = 15
+local aarightlimit = 15
+function updatespinheading()
+	if currentheading < 360 then
+		currentheading = currentheading + 20
+	else
+		currentheading = 0
+	end
+end
+		
+basedir = newfunc(
+    "Base Direction",
+    "value_str",
+    basemod,
+    function(feat)
+		if feat.on then
+			if aamaster.on then
+				if feat.value == 0 then
+					updatespinheading()
+					entity.set_entity_heading(getped(player.player_id()),currentheading)
+				elseif feat.value == 1 then
+					entity.set_entity_heading(getped(player.player_id()),entity.get_entity_heading(getped(player.player_id())) + aaleftlimit)
+					CD(10)
+					entity.set_entity_heading(getped(player.player_id()),entity.get_entity_heading(getped(player.player_id())) - aarightlimit)
+				end
+				CD(0)
+			end
+			return HANDLER_CONTINUE
+		else
+			return HANDLER_POP
+		end
+    end
+):set_str_data(
+    {
+        "Spin",
+		"Jitter"
+    }
+)
+aaleft = newfunc(
+    "Left Limit",
+    "slider",
+    basemod,
+    function(feat)
         if feat.on then
-			aa = ped.clone_ped(getped(player.player_id()))
-			network.request_control_of_entity(aa)
-			entity.delete_entity(aa)
-			CD(15)
-            return HANDLER_CONTINUE
+			aaleftlimit = feat.value
+			return HANDLER_CONTINUE
         else
             return HANDLER_POP
         end
     end
 )
+aaleft.max = 60
+aaleft.min = 0
+aaleft.mod = 1
+aaleft.value = 15
+aaright = newfunc(
+    "Right Limit",
+    "slider",
+    basemod,
+    function(feat)
+        if feat.on then
+			aarightlimit = feat.value
+			return HANDLER_CONTINUE
+        else
+            return HANDLER_POP
+        end
+    end
+)
+aaright.max = 60
+aaright.min = 0
+aaright.mod = 1
+aaright.value = 15
 fl = newfunc(
     "Fake-Lag",
     "slider",
@@ -7891,6 +8022,19 @@ dt.max = 16
 dt.min = 0
 dt.mod = 1
 dt.value = 8
+dt = newfunc(
+    "AA-Debugger",
+    "toggle",
+    basemod,
+    function(feat)
+        if feat.on then
+			print(entity.get_entity_heading(getped(player.player_id())))
+            return HANDLER_CONTINUE
+        else
+            return HANDLER_POP
+        end
+    end
+)
 --Protex
 local entiti = newfunc("实体防护", "parent", protex).id
 mdlchgdetkt =
@@ -8460,7 +8604,7 @@ newfunc(
         if feat.on then
             for i = 1, #ped.get_all_peds() do
                 for pid = 0, 32 do
-                    if ped.get_all_peds()[i] == player.get_player_ped(pid) then
+                    if ped.get_all_peds()[i] == getped(pid) then
                         break
                     else
                         entity.freeze_entity(ped.get_all_peds()[i], true)
@@ -8484,7 +8628,7 @@ newfunc(
         if feat.on then
             for i = 1, #ped.get_all_peds() do
                 for pid = 0, 32 do
-                    if ped.get_all_peds()[i] == player.get_player_ped(pid) then
+                    if ped.get_all_peds()[i] == getped(pid) then
                         break
                     else
                         ped.set_ped_health(ped.get_all_peds()[i], 0)
@@ -8504,7 +8648,7 @@ newfunc(
     function(feat, pid)
         if feat.on then
             for i = 1, #ped.get_all_peds() do
-                ai.task_combat_ped(ped.get_all_peds()[i], meped, 0, 16)
+                ai.task_combat_ped(ped.get_all_peds()[i], getped(player.player_id()), 0, 16)
             end
             return HANDLER_CONTINUE
         else
@@ -8614,7 +8758,7 @@ lobbyinfo = newfunc(
                 txtpos.x = txtpos.x - 0.01
                 txtpos.y = txtpos.y + 0.04
                 ui.set_text_scale(renderfontsize)
-                ui.draw_text("当前脚本版本 V1.0.7 Public", txtpos)
+                ui.draw_text("当前脚本版本 V1.0.8 Public", txtpos)
                 txtpos.y = txtpos.y + 0.03
                 ui.set_text_scale(renderfontsize)
                 if network.is_session_started() then
@@ -8645,7 +8789,7 @@ lobbyinfo = newfunc(
                 txtpos.x = txtpos.x - 0.01
                 txtpos.y = txtpos.y + 0.04
                 ui.set_text_scale(renderfontsize)
-                ui.draw_text("当前脚本版本 V1.0.7 Public", txtpos)
+                ui.draw_text("当前脚本版本 V1.0.8 Public", txtpos)
                 txtpos.y = txtpos.y + 0.03
                 ui.set_text_scale(renderfontsize)
                 if network.is_session_started() then
@@ -8700,7 +8844,7 @@ playerinfo = newfunc(
 				pos.x = 0.0001
 				pos.y = 0.000001
 				for i = 0, 32 do
-					if player.get_player_ped(i) ~= 0 then
+					if getped(i) ~= 0 then
 						local name = player.get_player_name(i)
 						ui.set_text_color(255, 255, 255, 255)
 						if player.is_player_host(i) then
@@ -8733,7 +8877,7 @@ playerinfo = newfunc(
 				pos.x = 0.01
 				pos.y = 0.1
 				for i = 0, 32 do
-					if player.get_player_ped(i) ~= 0 then
+					if getped(i) ~= 0 then
 						local name = player.get_player_name(i)
 						ui.set_text_color(255, 255, 255, 255)
 						if player.is_player_host(i) then
@@ -8916,8 +9060,8 @@ newplfunc(
         entity.set_entity_god_mode(ball, true)
         entity.attach_entity_to_entity(
             ball,
-            player.get_player_ped(pid),
-            ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+            getped(pid),
+            ped.get_ped_bone_index(getped(pid), 11816),
             v3(),
             v3(),
             true,
@@ -8938,7 +9082,7 @@ newplfunc(
         local allweaponhashes = weapon.get_all_weapon_hashes()
         for i = 1, #allweaponhashes do
             requestmodel(allweaponhashes[i])
-            weapon.give_delayed_weapon_to_ped(player.get_player_ped(pid), allweaponhashes[i], 0, 0)
+            weapon.give_delayed_weapon_to_ped(getped(pid), allweaponhashes[i], 0, 0)
             streaming.set_model_as_no_longer_needed(allweaponhashes[i])
         end
     end
@@ -8957,26 +9101,26 @@ newplfunc(
         elseif feat.value == 1 then
             TSE(545396442, pid, {0})
         elseif feat.value == 2 then
-            network.request_control_of_entity(player.get_player_ped(pid))
+            network.request_control_of_entity(getped(pid))
             local pos = ui.get_waypoint_coord()
             local pos = v3(pos.x, pos.y, 10000)
-            if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) then
+            if ped.is_ped_in_any_vehicle(getped(pid)) then
                 network.request_control_of_entity(getveh(pid))
                 entity.set_entity_coords_no_offset(getveh(pid), pos)
 				vehicle.set_vehicle_on_ground_properly(getveh(pid))
             else
-                entity.set_entity_coords_no_offset(player.get_player_ped(pid), pos)
+                entity.set_entity_coords_no_offset(getped(pid), pos)
             end
         elseif feat.value == 3 then
-            network.request_control_of_entity(player.get_player_ped(pid))
+            network.request_control_of_entity(getped(pid))
             local pos = getcoords(player.player_id())
             pos.z = 10000
-            if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) then
+            if ped.is_ped_in_any_vehicle(getped(pid)) then
                 network.request_control_of_entity(getveh(pid))
                 entity.set_entity_coords_no_offset(getveh(pid), pos)
 				vehicle.set_vehicle_on_ground_properly(getveh(pid))
             else
-                entity.set_entity_coords_no_offset(player.get_player_ped(pid), pos)
+                entity.set_entity_coords_no_offset(getped(pid), pos)
             end
         end
     end
@@ -9135,8 +9279,8 @@ customattachselected =
             obj = object.create_object(joaat(entname), v3(), true, false)
             entity.attach_entity_to_entity(
                 obj,
-                player.get_player_ped(pid),
-                ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+                getped(pid),
+                ped.get_ped_bone_index(getped(pid), 11816),
                 v3(),
                 v3(0.0, 0.0, 10.0),
                 true,
@@ -9162,8 +9306,8 @@ newplfunc(
         bf = object.create_object(3229200997, v3(), true, false)
         entity.attach_entity_to_entity(
             bf,
-            player.get_player_ped(pid),
-            ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+            getped(pid),
+            ped.get_ped_bone_index(getped(pid), 11816),
             v3(),
             v3(0.0, 0.0, 10.0),
             true,
@@ -9184,8 +9328,8 @@ newplfunc(
         ufo = object.create_object(gameplay.get_hash_key("p_spinning_anus_s"), v3(), true, false)
         entity.attach_entity_to_entity(
             ufo,
-            player.get_player_ped(pid),
-            ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+            getped(pid),
+            ped.get_ped_bone_index(getped(pid), 11816),
             v3(),
             v3(0.0, 0.0, 0),
             true,
@@ -9206,8 +9350,8 @@ newplfunc(
         DICK = object.create_object(gameplay.get_hash_key("prop_cs_dildo_01"), v3(), true, false)
         entity.attach_entity_to_entity(
             DICK,
-            player.get_player_ped(pid),
-            ped.get_ped_bone_index(player.get_player_ped(pid), 11816),
+            getped(pid),
+            ped.get_ped_bone_index(getped(pid), 11816),
             v3(),
             v3(0.0, 0.0, 0),
             true,
@@ -9225,7 +9369,7 @@ newplfunc(
     selectedplayerattach,
     function(feat, pid)
         if feat.on then
-            fire.add_explosion(getcoords(pid), 12, true, false, 0, player.get_player_ped(pid))
+            fire.add_explosion(getcoords(pid), 12, true, false, 0, getped(pid))
             CD(10)
             return HANDLER_CONTINUE
         else
@@ -9239,7 +9383,7 @@ newplfunc(
     selectedplayerattach,
     function(feat, pid)
         if feat.on then
-            fire.add_explosion(getcoords(pid), 13, true, false, 0, player.get_player_ped(pid))
+            fire.add_explosion(getcoords(pid), 13, true, false, 0, getped(pid))
             CD(10)
             return HANDLER_CONTINUE
         else
@@ -9270,7 +9414,7 @@ newplfunc(
     function(feat, pid)
         local allweaponhashes = weapon.get_all_weapon_hashes()
         for i = 1, #allweaponhashes do
-            weapon.remove_weapon_from_ped(player.get_player_ped(pid), allweaponhashes[i])
+            weapon.remove_weapon_from_ped(getped(pid), allweaponhashes[i])
             CD(5)
         end
     end
@@ -9339,7 +9483,7 @@ newplfunc(
     selectedplayertroll,
     function(feat, pid)
         if feat.on then
-            ped.set_ped_to_ragdoll(player.get_player_ped(pid), 2500, 0, 0)
+            ped.set_ped_to_ragdoll(getped(pid), 2500, 0, 0)
             CD(50)
             return HANDLER_CONTINUE
         else
@@ -9354,7 +9498,7 @@ newplfunc(
     selectedplayertroll,
     function(feat, pid)
         if feat.on then
-            fire.add_explosion(getcoords(pid), 4, false, false, 100.0, player.get_player_ped(pid))
+            fire.add_explosion(getcoords(pid), 4, false, false, 100.0, getped(pid))
         end
     end
 )
@@ -9365,7 +9509,7 @@ newplfunc(
     selectedplayertroll,
     function(feat, pid)
         if pid ~= player.player_id() and player.is_player_valid(pid) then
-            ped.clear_ped_tasks_immediately(player.get_player_ped(pid))
+            ped.clear_ped_tasks_immediately(getped(pid))
         end
     end
 )
@@ -9376,7 +9520,7 @@ newplfunc(
     selectedplayertroll,
     function(feat, pid)
         if feat.on then
-            fire.add_explosion(getcoords(pid), 0, true, false, 0, player.get_player_ped(pid))
+            fire.add_explosion(getcoords(pid), 0, true, false, 0, getped(pid))
             CD(15)
             return HANDLER_CONTINUE
         else
@@ -9530,12 +9674,12 @@ newplfunc(
     selectedplayerveh,
     function(feat)
         if feat.on then
-			if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) == true then
+			if ped.is_ped_in_any_vehicle(getped(pid)) == true then
 				vehicle.set_vehicle_can_be_locked_on(getveh(pid), false, false)
             end
 			return HANDLER_CONTINUE
 		else
-			if ped.is_ped_in_any_vehicle(player.get_player_ped(pid)) == true then
+			if ped.is_ped_in_any_vehicle(getped(pid)) == true then
 				vehicle.set_vehicle_can_be_locked_on(getveh(pid), true, false)
             end
 			return HANDLER_POP
