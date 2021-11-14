@@ -1,5 +1,5 @@
 --Define
-scriptver = "1.0.8"
+scriptver = "1.0.9"
 notifycolor = 175
 notifyset = 2
 inputstyle = 0
@@ -6465,6 +6465,25 @@ newfunc(
     end
 )
 newfunc(
+    "儿童锁",
+    "toggle",
+    allplayerveh,
+    function(feat, pid)
+        if feat.on then
+            for pid = 0, 32 do
+                if pid ~= player.player_id() and player.is_player_valid(pid) then
+                    if player.is_ped_in_any_vehicle == true then
+                        vehicle.set_vehicle_doors_locked(getveh(pid),4)
+                    end
+                end
+            end
+            return HANDLER_CONTINUE
+        else
+            return HANDLER_POP
+        end
+    end
+)
+newfunc(
     "修复载具",
     "action",
     allplayerveh,
@@ -6561,7 +6580,22 @@ newfunc(
         end
     end
 )
-
+newfunc(
+    "引爆电话炸弹",
+    "action",
+    allplayerveh,
+    function(feat, pid)
+        for pid = 0, 32 do
+            if pid ~= player.player_id() and player.is_player_valid(pid) then
+                if player.is_ped_in_any_vehicle == true then
+					if vehicle.does_vehicle_have_parachute(getveh(pid)) == true then
+						vehicle.set_vehicle_parachute_active(getveh(pid), true)
+					end
+                end
+            end
+        end
+    end
+)
 --Host Option
 hostoption = newfunc("主机选项", "parent", online).id
 kickhost =
@@ -7166,6 +7200,49 @@ newfunc(
 		end
     end
 )
+--Session Searcher
+sessionsearcher = newfunc("战局查找器", "parent", online).id
+minplayer = 10
+sessionswitchtime = 1
+sessionswitched = false
+newfunc(
+    "主开关",
+    "toggle",
+    sessionsearcher,
+    function(feat)
+        if feat.on then
+			if network.is_session_started() then
+				sessionswitched = false
+			end
+			if sessionswitched == false then
+				if player.player_count() < minplayer then
+					script.set_global_i(1312860,0)
+					script.set_global_i(1312443,1)
+					CD(200)
+					script.set_global_i(1312443,0)
+					CD(1000)
+					sessionswitchtime = sessionswitchtime + 1
+					logg("人数不满足要求.正在进行第"..sessionswitchtime.."次尝试")
+					sessionswitched = true
+				else
+					logg("战局查找器已关闭")
+					sessionswitched = false
+					sessionswitchtime = 1
+					feat.on = false
+				end
+			end
+            return HANDLER_CONTINUE
+        else
+            return HANDLER_POP
+        end
+    end
+)
+sessionsearchermin = newfunc("设置最小人数","action_value_i",sessionsearcher, function(feat)
+	minplayer = feat.value
+end)
+sessionsearchermin.min = 1
+sessionsearchermin.max = 32
+sessionsearchermin.mod = 1
 --Fake Impulse User
 newfunc(
     "伪装成为IMP用户",
@@ -8758,7 +8835,7 @@ lobbyinfo = newfunc(
                 txtpos.x = txtpos.x - 0.01
                 txtpos.y = txtpos.y + 0.04
                 ui.set_text_scale(renderfontsize)
-                ui.draw_text("当前脚本版本 V1.0.8 Public", txtpos)
+                ui.draw_text("当前脚本版本 V1.0.9 Public", txtpos)
                 txtpos.y = txtpos.y + 0.03
                 ui.set_text_scale(renderfontsize)
                 if network.is_session_started() then
@@ -8789,7 +8866,7 @@ lobbyinfo = newfunc(
                 txtpos.x = txtpos.x - 0.01
                 txtpos.y = txtpos.y + 0.04
                 ui.set_text_scale(renderfontsize)
-                ui.draw_text("当前脚本版本 V1.0.8 Public", txtpos)
+                ui.draw_text("当前脚本版本 V1.0.9 Public", txtpos)
                 txtpos.y = txtpos.y + 0.03
                 ui.set_text_scale(renderfontsize)
                 if network.is_session_started() then
@@ -9658,6 +9735,21 @@ newplfunc(
     end
 )
 newplfunc(
+    "儿童锁",
+    "toggle",
+    selectedplayerveh,
+    function(feat, pid)
+        if feat.on then
+            if player.is_ped_in_any_vehicle == true then
+                vehicle.set_vehicle_doors_locked(getveh(pid),4)
+            end
+            return HANDLER_CONTINUE
+        else
+            return HANDLER_POP
+        end
+    end
+)
+newplfunc(
     "修复载具",
     "action",
     selectedplayerveh,
@@ -9726,6 +9818,18 @@ newplfunc(
         if player.is_ped_in_any_vehicle == true then
             if vehicle.has_vehicle_phone_explosive_device() == true then
                 vehicle.detonate_vehicle_phone_explosive_device()
+            end
+        end
+    end
+)
+newplfunc(
+    "让他的灭世暴徒2000强制开伞",
+    "action",
+    selectedplayerveh,
+    function(feat, pid)
+        if player.is_ped_in_any_vehicle == true then
+            if vehicle.does_vehicle_have_parachute(getveh(pid)) == true then
+                vehicle.set_vehicle_parachute_active(getveh(pid), true)
             end
         end
     end
