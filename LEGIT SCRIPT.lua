@@ -4809,8 +4809,7 @@ function kickplayer(pid)
 		if network.network_is_host() then
 			network.network_session_kick_player(pid)
 		else
-			TSE(2092565704, pid, {pid, script.get_global_i(1630816 + (1 + (pid * 597) + 508))})
-			TSE(0x7CBA04C8, pid, {pid, script.get_global_i(1630816 + (1 + (pid * 597) + 508))})
+			TSE(1228916411, pid, {pid, script.get_global_i(1893548 + (1 + (pid * 600) + 511))})
 		end
 	end
 end
@@ -4904,7 +4903,7 @@ function setstatfloat(hash, prefix, value, save)
     end
 end
 function getglobaloffset(pid, offset)
-    return 1590908 + (1 + (pid * 874)) + 266 + offset
+    return 1853128 + (1 + (pid * 888)) + 205 + offset
 end
 function getglobalinfoi(pid, offset)
     return script.get_global_i(getglobaloffset(pid, offset))
@@ -5609,28 +5608,28 @@ newfunc(
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
                     TSE(
-                        1152266822,
+                        1890277845,
                         pid,
                         {
                             player.player_id(),
                             10000,
                             -1292453789,
                             1,
-                            script.get_global_i(1630816 + (1 + (pid * 597) + 508)),
+                            script.get_global_i(1893548 + (1 + (pid * 600) + 511)),
                             script.get_global_i(1658176 + 9),
                             script.get_global_i(1658176 + 10)
                         }
                     )
                     CD(1200)
                     TSE(
-                        1152266822,
+                        1890277845,
                         pid,
                         {
                             player.player_id(),
                             10000,
                             -1292453789,
                             0,
-                            script.get_global_i(1630816 + (1 + (pid * 597) + 508)),
+                            script.get_global_i(1893548 + (1 + (pid * 600) + 511)),
                             script.get_global_i(1658176 + 9),
                             script.get_global_i(1658176 + 10)
                         }
@@ -5653,7 +5652,7 @@ newfunc(
     function(feat, pid)
         for pid = 0, 32 do
             if pid ~= player.player_id() and player.is_player_valid(pid) then
-                TSE(1187364773, pid, {pid, script.get_global_i(1628955 + (1 + (pid * 614)) + 532)})
+                TSE(-91354030, pid, {pid, script.get_global_i(1628955 + (1 + (pid * 614)) + 532)})
             end
         end
     end
@@ -5667,9 +5666,9 @@ newfunc(
         for pid = 0, 32 do
             if pid ~= player.player_id() and player.is_player_valid(pid) then
                 TSE(
-                    -397188359,
+                    -391633760,
                     pid,
-                    {pid, utils.time() - 60, utils.time(), 1, 1, script.get_global_i(1630816 + (1 + (pid * 597) + 508))}
+                    {pid, utils.time() - 60, utils.time(), 1, 1, script.get_global_i(1893548 + (1 + (pid * 600) + 511))}
                 )
             end
         end
@@ -5734,9 +5733,9 @@ newfunc(
         for pid = 0, 32 do
             if pid ~= player.player_id() and player.is_player_valid(pid) then
                 if feat.value == 0 then
-                    TSE(-1479371259, pid, {1300962917})
+                    TSE(-621279188, pid, {1300962917})
                 elseif feat.value == 1 then
-                    TSE(545396442, pid, {0})
+                    TSE(2020588206, pid, {0})
                 elseif feat.value == 2 then
                     network.request_control_of_entity(getped(pid))
                     local pos = ui.get_waypoint_coord()
@@ -5779,12 +5778,12 @@ newfunc(
         for pid = 0, 32 do
             if pid ~= player.player_id() and player.is_player_valid(pid) then
                 if feat.value == 0 then
-                    TSE(0x50c72ec2, pid, {0, 1, 5, 0})
+                    TSE(-764524031, pid, {0, 1, 5, 0})
                 elseif feat.value == 1 then
-                    TSE(0xed1bc159, pid, {0, 1, 5})
+                    TSE(248967238, pid, {0, 1, 5})
                 elseif feat.value == 2 then
-                    TSE(0xed1bc159, pid, {1, 1, 6})
-                    TSE(0xed1bc159, pid, {0, 1, 6, 0})
+                    TSE(248967238, pid, {1, 1, 6})
+                    TSE(248967238, pid, {0, 1, 6, 0})
                 end
             end
         end
@@ -5818,7 +5817,7 @@ custombountyall =
             if pid ~= player.player_id() and player.is_player_valid(pid) then
                 if anonbountyall.on then
                     TSE(
-                        0xf90cc891,
+                        1294995624,
                         pid,
                         {
                             -1,
@@ -5846,7 +5845,7 @@ custombountyall =
                     )
                 else
                     TSE(
-                        0xf90cc891,
+                        1294995624,
                         pid,
                         {
                             -1,
@@ -6115,7 +6114,7 @@ newfunc(
         if feat.on then
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
-                    TSE(891272013, pid, {pid, math.random(-2147483647, 2147483647)}, true)
+                    TSE(802133775, pid, {pid, math.random(-2147483647, 2147483647)}, true)
                     system.yield(0)
                 end
             end
@@ -6133,7 +6132,7 @@ newfunc(
             for pid = 0, 32 do
                 if pid ~= player.player_id() and player.is_player_valid(pid) then
                     TSE(
-                        -2041535807,
+                        -1704141512,
                         pid,
                         {
                             pid,
@@ -6162,7 +6161,7 @@ newfunc(
     function()
         for pid = 0, 32 do
             if pid ~= player.player_id() and player.is_player_valid(pid) then
-                TSE(1472357458, pid, {pid, 1})
+                TSE(1114091621, pid, {pid, 1})
             end
         end
     end
@@ -6174,7 +6173,7 @@ newfunc(
     function()
         for pid = 0, 32 do
             if pid ~= player.player_id() and player.is_player_valid(pid) then
-                TSE(0x4a72a08d, pid, {-1, 1, -1})
+                TSE(603406648, pid, {-1, 1, -1})
             end
         end
     end
@@ -6258,43 +6257,30 @@ newfunc(
 allplayerabusive = newfunc("攻击选项", "parent", allplayers).id
 --Script Event Crash
 local crashscriptevent = {
-    -988842806,
-    -2043109205,
-    1926582096,
-    153488394,
-    1249026189,
-    0x4a72a08d,
-    0x0F478794,
-    315658550,
-	-1881357102,
-	1033875141,
-	-877212109,
-	-720040631,
-	-435067392,
-	-1729804184,
-	1428412924,
-	823645419,
-	1070934291,
-	-171207973,
-	1317868303,
-	-1252906024,
-	-1890951223,
-	-1212832151,
-	-1559754940,
-	-1054826273,
-	1620254541,
-	1401831542,
-	-1491386500,
-	-977515445,
-	767605081,
-	-1730227041,
-	-1949011582,
-	-2122716210,
-	-1882923979,
-	0x7cba04c8,
-	0x09260c0a,
-	0x445b050e,
-	2092565704
+	1246667869,
+	1757755807,
+	-1125867895,
+	-1991317864,
+	-614457627,
+	603406648,
+	-1970125962,
+	998716537,
+	163598572,
+	-1308840134,
+	-1501164935,
+	436475575,
+	-290218924,
+	-368423380,
+	962740265,
+	-1386010354,
+	2112408256,
+	677240627,
+	962740265,
+	-1386010354,
+	2112408256,
+	677240627,
+	-1205085020,
+	1258808115
 }
 function getcrasharg(pid)
 	local parameters = {
@@ -7133,9 +7119,9 @@ chatcommandswitch = newfunc(
 				for pid = 0,32 do
 					if target == player.get_player_name(pid) or target == player.get_player_scid(pid) then
 						TSE(
-							-397188359,
+							-391633760,
 							pid,
-							{pid, utils.time() - 60, utils.time(), 1, 1, script.get_global_i(1630816 + (1 + (pid * 597) + 508))}
+							{pid, utils.time() - 60, utils.time(), 1, 1, script.get_global_i(1893548 + (1 + (pid * 600) + 511))}
 						)
 					end
 				end
@@ -7216,10 +7202,10 @@ newfunc(
 			end
 			if sessionswitched == false then
 				if player.player_count() < minplayer then
-					script.set_global_i(1312860,0)
-					script.set_global_i(1312443,1)
+					script.set_global_i(1575004,0)
+					script.set_global_i(1574587,1)
 					CD(200)
-					script.set_global_i(1312443,0)
+					script.set_global_i(1574587,0)
 					CD(1000)
 					sessionswitchtime = sessionswitchtime + 1
 					logg("人数不满足要求.正在进行第"..sessionswitchtime.."次尝试")
@@ -7243,27 +7229,6 @@ end)
 sessionsearchermin.min = 1
 sessionsearchermin.max = 32
 sessionsearchermin.mod = 1
---Fake Impulse User
-newfunc(
-    "伪装成为IMP用户",
-    "toggle",
-    online,
-    function(feat, pid)
-        if feat.on then
-            if network.is_session_started() then
-                for pid = 0, 32 do
-                    if player.is_player_valid() then
-                        TSE(1120313136, pid, 1289518925, 8373, math.random(0, 10000), 177)
-                    end
-                end
-                CD(5)
-            end
-            return HANDLER_CONTINUE
-        else
-            return HANDLER_POP
-        end
-    end
-)
 --Oribital Cooldown
 newfunc(
     "移除天基炮冷却",
@@ -9068,28 +9033,28 @@ newplfunc(
     function(feat, pid)
         if feat.on then
             TSE(
-                1152266822,
+                1890277845,
                 pid,
                 {
                     player.player_id(),
                     10000,
                     -1292453789,
                     1,
-                    script.get_global_i(1630816 + (1 + (pid * 597) + 508)),
+                    script.get_global_i(1893548 + (1 + (pid * 600) + 511)),
                     script.get_global_i(1658176 + 9),
                     script.get_global_i(1658176 + 10)
                 }
             )
             CD(1200)
             TSE(
-                1152266822,
+                1890277845,
                 pid,
                 {
                     player.player_id(),
                     10000,
                     -1292453789,
                     0,
-                    script.get_global_i(1630816 + (1 + (pid * 597) + 508)),
+                    script.get_global_i(1893548 + (1 + (pid * 600) + 511)),
                     script.get_global_i(1658176 + 9),
                     script.get_global_i(1658176 + 10)
                 }
@@ -9108,7 +9073,7 @@ newplfunc(
     "toggle",
     selectedplayerfriendly,
     function(feat, pid)
-        TSE(1187364773, pid, {pid, script.get_global_i(1628955 + (1 + (pid * 614)) + 532)})
+        TSE(-91354030, pid, {pid, script.get_global_i(1628955 + (1 + (pid * 614)) + 532)})
     end
 )
 --Give OTR
@@ -9118,9 +9083,9 @@ newplfunc(
     selectedplayerfriendly,
     function(feat, pid)
         TSE(
-            -397188359,
+            -391633760,
             pid,
-            {pid, utils.time() - 60, utils.time(), 1, 1, script.get_global_i(1630816 + (1 + (pid * 597) + 508))}
+            {pid, utils.time() - 60, utils.time(), 1, 1, script.get_global_i(1893548 + (1 + (pid * 600) + 511))}
         )
     end
 )
@@ -9174,9 +9139,9 @@ newplfunc(
     selectedplayertroll,
     function(feat)
         if feat.value == 0 then
-            TSE(-1479371259, pid, {1300962917})
+            TSE(-621279188, pid, {1300962917})
         elseif feat.value == 1 then
-            TSE(545396442, pid, {0})
+            TSE(2020588206, pid, {0})
         elseif feat.value == 2 then
             network.request_control_of_entity(getped(pid))
             local pos = ui.get_waypoint_coord()
@@ -9216,12 +9181,12 @@ newplfunc(
     selectedplayertroll,
     function(feat)
         if feat.value == 0 then
-            TSE(0x50c72ec2, pid, {0, 1, 5, 0})
+            TSE(-764524031, pid, {0, 1, 5, 0})
         elseif feat.value == 1 then
-            TSE(0xed1bc159, pid, {0, 1, 5})
+            TSE(248967238, pid, {0, 1, 5})
         elseif feat.value == 2 then
-            TSE(0xed1bc159, pid, {1, 1, 6})
-            TSE(0xed1bc159, pid, {0, 1, 6, 0})
+            TSE(248967238, pid, {1, 1, 6})
+            TSE(248967238, pid, {0, 1, 6, 0})
         end
     end
 ):set_str_data(
@@ -9251,7 +9216,7 @@ custombountyselected =
     function(feat, pid)
 		if anonbountyselected.on then
 			TSE(
-				0xf90cc891,
+				1294995624,
 				pid,
 				{
 					-1,
@@ -9279,7 +9244,7 @@ custombountyselected =
 			)
 		else
 			TSE(
-				0xf90cc891,
+				1294995624,
 				pid,
 				{
 					-1,
@@ -9503,7 +9468,7 @@ newplfunc(
     selectedplayertroll,
     function(feat, pid)
         if feat.on then
-            TSE(891272013, pid, {pid, math.random(-2147483647, 2147483647)}, true)
+            TSE(802133775, pid, {pid, math.random(-2147483647, 2147483647)}, true)
             CD(0)
             return HANDLER_CONTINUE
         end
@@ -9517,7 +9482,7 @@ newplfunc(
     function(feat, pid)
         if pid ~= player.player_id() and player.is_player_valid(pid) then
             TSE(
-                -2041535807,
+                -1704141512,
                 pid,
                 {
                     pid,
@@ -9542,7 +9507,7 @@ newplfunc(
     "action",
     selectedplayertroll,
     function()
-        TSE(1472357458, pid, {pid, 1})
+        TSE(1114091621, pid, {pid, 1})
     end
 )
 newplfunc(
@@ -9550,7 +9515,7 @@ newplfunc(
     "action",
     selectedplayertroll,
     function()
-        TSE(0x4a72a08d, pid, {-1, 1, -1})
+        TSE(603406648, pid, {-1, 1, -1})
     end
 )
 --Ragdoll
